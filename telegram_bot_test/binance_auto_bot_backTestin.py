@@ -21,6 +21,28 @@ def GetRSI(ohlcv,period,st):
     RS = _gain / _loss
     return float(pd.Series(100 - (100 / (1 + RS)), name="RSI").iloc[st])
 
+def GetRSI_2(ohlcv):
+    print("RSI7:  ",GetRSI(ohlcv, 7, -3), "->",GetRSI(ohlcv, 7, -2), "->",GetRSI(ohlcv, 7, -1))
+    print("RSI14: ",GetRSI(ohlcv, 14, -3), "->",GetRSI(ohlcv, 14, -2), "->",GetRSI(ohlcv, 14, -1))
+    print("RSI21: ",GetRSI(ohlcv, 21, -3), "->",GetRSI(ohlcv, 21, -2), "->",GetRSI(ohlcv, 21, -1))
+    print("RES7_21 : ", GetRSI(ohlcv, 7, -1) - GetRSI(ohlcv, 21, -1))
+
+def GetGainLoss(delta, period):
+    
+
+def GetRSIToBackTesting(ohlcv):
+    ohlcv["close"] = ohlcv["close"]
+    delta = ohlcv["close"].diff()
+    up, down = delta.copy(), delta.copy()
+    up[up < 0] = 0 
+    down[down > 0] = 0
+    _gain = up.ewm(com=(period - 1), min_periods=period).mean()
+    _loss = down.abs().ewm(com=(period - 1), min_periods=period).mean()
+    RS = _gain / _loss
+    ohicv['rsi7'] = 
+    return float(pd.Series(100 - (100 / (1 + RS)), name="RSI").iloc[st])
+    ohicv.to_excel('rsi.xlsx')    
+
 #거래할 코인 티커와 심볼
 Target_Coin_Ticker = "BTC/USDT"
 Target_Coin_Symbol = "BTCUSDT"
@@ -29,7 +51,5 @@ binanceX = ccxt.binance()
 
 df_15 = GetOhlcv(binanceX,Target_Coin_Ticker, '15m')
 
-print("RSI7:  ",GetRSI(df_15, 7, -3), "->",GetRSI(df_15, 7, -2), "->",GetRSI(df_15, 7, -1))
-print("RSI14: ",GetRSI(df_15, 14, -3), "->",GetRSI(df_15, 14, -2), "->",GetRSI(df_15, 14, -1))
-print("RSI21: ",GetRSI(df_15, 21, -3), "->",GetRSI(df_15, 21, -2), "->",GetRSI(df_15, 21, -1))
-print("RES7_21 : ", GetRSI(df_15, 7, -1) - GetRSI(df_15, 21, -1))
+GetRSI(df_15, 7, -1)
+
